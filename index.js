@@ -12,7 +12,7 @@ const db = new sqlite3.Database('./db/test.db', (err) => {
 var cors = require('cors');
 
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS result (test_id INTEGER PRIMARY KEY AUTOINCREMENT, resp_id INTEGER NOT NULL, answer TEXT NOT NULL, distress INTEGER NOT NULL, physical_discomfort INTEGER NOT NULL, cognitive_discomfort INTEGER NOT NULL, emotional_violation INTEGER NOT NULL, motivation_decrease INTEGER NOT NULL, quiz_id INTEGER, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL)',
+    db.run(`CREATE TABLE IF NOT EXISTS result (test_id INTEGER PRIMARY KEY AUTOINCREMENT, resp_id INTEGER NOT NULL, answer TEXT NOT NULL, distress INTEGER NOT NULL, physical_discomfort INTEGER NOT NULL, cognitive_discomfort INTEGER NOT NULL, emotional_violation INTEGER NOT NULL, motivation_decrease INTEGER NOT NULL, quiz_id INTEGER, timestamp DATETIME DEFAULT (datetime('now','localtime')) NOT NULL)`,
     (err) => {
         if (err) {
             console.error(err.message);

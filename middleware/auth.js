@@ -1,28 +1,43 @@
 require('dotenv').config({path: '../weights.env'});
-const config = JSON.parse(process.env.WEIGHTS);
+const userMicroserviceHost = process.env.USER_MICROSERVICE_HOST;
+const axios = require('axios');
 
 const auth = async (req, res, next) => {
     try {
-        /*const authHeader = req.headers.authorization;
-        if (authHeader == undefined) {
+        let token = req.header('Authorization');
+        if (!token || token.length == 0) {
+            const responseToken = await axios.post(`${userMicroserviceHost}/user/new_respondent`);
+            if (responseToken == undefined) {
+                throw new Error('User service is unavailable');
+            } else {
+                req.token = responseToken.data.token;
+                const responseId = await axios.get(`${userMicroserviceHost}/user/${req.token}`);
+                if (responseId == undefined) {
+                    throw new Error('User service is unavailable');
+                } else {
+                    req.id = responseId.data.id;
+                    res.setHeader('Authorization', `Bearer ${req.token}`);
+                    next();
+                }
+            }
+        } else {
+            token = token.replace('Bearer ', '');
+            const responseId = await axios.get(`${userMicroserviceHost}/user/${token}`);
+            if (responseId.status == 200) {
+                req.token = token;
+                req.id = responseId.data.id;
+                next();
+            } else {
+                throw new Error('Invalid token');
+            }
         }
-        const token = authHeader.split(' ')[1];
-
-        if (token == null || token.length == 0) {
-            throw new Error("No token provided");
-        } */
-        //Request to User microservice to validate token
-
-        //Case where token is valid
-        req.token = 12345;
-        req.id = 123;
-        next();
-
-        //Case where token is not valid
-        //throw new Error("Token is invalid");
 
     } catch (e) {
-        res.status(401).send({error: e.message});
+        if (e.message == 'Invalid token' || e.message == 'Request failed with status code 404') {
+            res.status(401).send({error: "Invalid token"});
+        } else {
+            res.status(500).send({error: e.message});
+        }
     }
 };
 
