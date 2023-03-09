@@ -10,15 +10,29 @@ router.get('/api/ihru/results', auth, resultController.findByTimestamp);
 
 //Заглушка
 router.post('/user/new_respondent', async (req, res) => {
-    res.send("qwertyuiop");
+    res.send({ token: "qwerty" });
 });
 
-//Заглушка
-router.get('/user/:user_token', async (req, res) => {
-    if (req.params.user_token == "qwertyuiop") {
-        res.send("123");
+router.get('/user/check_researcher', async (req, res) => {
+    if (req.query.token != "qwertyRES") {
+        return res.send({ is_researcher: false });
     }
-    res.status(403).send({error: "qwe"})
+    res.send({ is_researcher: true });
 });
+
+router.get('/user/:user_token', async (req, res) => {
+    if (req.params.user_token == "qwerty") {
+        return res.send({ id: 1});
+    }
+    if (req.params.user_token == "qwerty2") {
+        return res.send({ id: 2});
+    }
+    if (req.params.user_token == "qwertyRES") {
+        return res.send({ id: 3});
+    }
+    res.status(404).send({error : 'User not found'});
+});
+
+//Конец заглушки
 
 module.exports = router;
