@@ -33,6 +33,36 @@ exports.findAllByRespId = async (resp_id) => {
     });
 };
 
+exports.findAllByQuizId = async (quiz_id) => {
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM result WHERE quiz_id = ?', [quiz_id], (err, rows) =>  { 
+            if (err) {
+                reject(err);
+            }
+            let resultSet = [];
+            rows.forEach(function (row) {  
+                resultSet.push(row);
+            });
+            resolve(resultSet);
+        });
+    });
+};
+
+exports.findAllByRespAndQuizId = async (resp_id, quiz_id) => {
+    return new Promise((resolve, reject) => {
+        db.all('SELECT * FROM result WHERE resp_id = ? and quiz_id = ?', [resp_id, quiz_id], (err, rows) =>  { 
+            if (err) {
+                reject(err);
+            }
+            let resultSet = [];
+            rows.forEach(function (row) {  
+                resultSet.push(row);
+            });
+            resolve(resultSet);
+        });
+    });
+};
+
 exports.findByTimestamp = async (timestamp) => {
     return new Promise((resolve, reject) => {
         db.all(`SELECT test_id, resp_id as respondent_id, unixepoch(timestamp) as datetime, quiz_id FROM result WHERE timestamp >= datetime(?, 'unixepoch')`, [timestamp], (err, rows) =>  { 

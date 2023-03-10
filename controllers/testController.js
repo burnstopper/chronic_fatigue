@@ -1,14 +1,18 @@
 const Test = require('../models/test');
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/test.db', (err) => {
-    if (err) {
-        console.error(err.message);
-        process.exit(1);
-    }
-});
+const axios = require('axios');
+require('dotenv').config({path: '../weights.env'});
+const userMicroserviceHost = process.env.USER_MICROSERVICE_HOST;
 
 exports.save = async (req, res) => {
     try {
+        if (req.body.quiz_id != undefined) {
+            const accessCheck = await axios.get(`${userMicroserviceHost}/members?respondent_id=${req.id}&quiz_id=${req.body.quiz_id}`);
+            if (accessCheck.data.has_access == false) {
+                res.status(403).send({error : 'You have no access to this quiz!'});
+                return;
+            }
+        }
         const result_id = await Test.save(req.body.answer, req.id, req.body.quiz_id);
         res.status(200).send({result_id : result_id});
     } catch (e) {

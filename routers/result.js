@@ -9,6 +9,11 @@ router.get('/api/ihru/results', auth, resultController.findByTimestamp);
 //router.get('/api/ihru/result/quiz/:id', auth, resultController.findAllByQuizId);
 
 //Заглушка
+
+router.get('/members', async (req, res) => {
+    res.send({ has_access: true });
+});
+
 router.post('/user/new_respondent', async (req, res) => {
     res.send({ token: "qwerty" });
 });
@@ -29,6 +34,9 @@ router.get('/user/:user_token', async (req, res) => {
     }
     if (req.params.user_token == "qwertyRES") {
         return res.send({ id: 3});
+    }
+    if (req.params.user_token == "qwertyUSER") {
+        return res.send({ id: 4});
     }
     res.status(404).send({error : 'User not found'});
 });
