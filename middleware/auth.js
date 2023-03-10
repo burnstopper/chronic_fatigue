@@ -33,7 +33,7 @@ const auth = async (req, res, next) => {
         }
 
     } catch (e) {
-        if (e.message == 'Invalid token' || e.message == 'Request failed with status code 404') {
+        if (e.message == 'Invalid token' || e.message == 'Request failed with status code 404' || e.message == 'Request failed with status code 401') {
             res.status(401).send({error: "Invalid token"});
         } else {
             res.status(500).send({error: e.message});
