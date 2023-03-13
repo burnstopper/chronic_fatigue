@@ -17,6 +17,7 @@ const auth = async (req, res, next) => {
                 } else {
                     req.id = responseId.data.id;
                     res.setHeader('Authorization', `Bearer ${req.token}`);
+                    res.setHeader("Access-Control-Expose-Headers","Authorization");
                     next();
                 }
             }
