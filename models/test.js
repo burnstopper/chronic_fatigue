@@ -40,7 +40,7 @@ exports.save = async (answer, resp_id, quiz_id) => {
     return new Promise(async (resolve, reject) => {
         if (await validate(answer)) {
             const results = await calculate(answer);
-            db.run('INSERT INTO result (resp_id, answer, distress, physical_discomfort, cognitive_discomfort, emotional_violation, motivation_decrease, quiz_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [resp_id, answer, results[0], results[1], results[2], results[3], results[4], quiz_id], function(err) {
+            db.run('INSERT INTO result (resp_id, answer, distress, physical_discomfort, cognitive_discomfort, emotional_violation, motivation_decrease, quiz_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [resp_id, answer.join(), results[0], results[1], results[2], results[3], results[4], quiz_id], function(err) {
                 if (err) {
                     reject(err);
                 } else {

@@ -26,6 +26,7 @@ db.serialize(() => {
 });
 const testRouter = require('./routers/test');
 const resultRouter = require('./routers/result');
+const stubRouter = require('./routers/stub');
 
 const app = express();
 const server = http.createServer(app);
@@ -42,6 +43,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(testRouter);
 app.use(resultRouter);
+app.use(stubRouter);
 server.listen(port, () => {
     console.log('Server is up! on port ' + port);
 });
