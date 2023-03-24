@@ -25,7 +25,7 @@ router.get('/members', async (req, res) => {
 router.post('/user/new_respondent', async (req, res) => {
     try {
         const token = uuidv4();
-        const result = client.query(`INSERT INTO temp_respondents (token) VALUES ('${token}')`);
+        const result = client.query(`INSERT INTO respondent.respondents (token) VALUES ('${token}')`);
 
         res.send({ token: token });
     } catch (e) {
@@ -49,7 +49,7 @@ router.get('/user/:user_token', async (req, res) => {
     }
 
     try {
-        const result = await client.query(`SELECT id FROM temp_respondents WHERE token = '${req.params.user_token}'`);
+        const result = await client.query(`SELECT id FROM respondent.respondents WHERE token = '${req.params.user_token}'`);
         if (result.rows.length == 0) {
             return res.status(404).send({ error: 'User not found' });
         }
