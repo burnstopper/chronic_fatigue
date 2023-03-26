@@ -13,9 +13,16 @@ exports.save = async (req, res) => {
                 return;
             }
         }
-        const result_id = await Test.save(req.body.answer, req.id, req.body.quiz_id);
+
+        const quiz_id = parseInt(req.body.quiz_id);
+
+        if (isNaN(quiz_id)) {
+            throw new Error("Invalid structure of test data!");
+        }
+
+        const result_id = await Test.save(req.body.answer, req.id, quiz_id);
         res.status(200).send({result_id : result_id});
     } catch (e) {
-        res.status(400).send({error : e.message});
+        res.status(400).send({error : e.message || e});
     }
 };
