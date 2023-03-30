@@ -65,7 +65,7 @@ exports.findAllByRespAndQuizId = async (resp_id, quiz_id) => {
 
 exports.findByTimestamp = async (timestamp) => {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT test_id, resp_id as respondent_id, unixepoch(timestamp) as datetime, quiz_id FROM result WHERE timestamp >= datetime(?, 'unixepoch')`, [timestamp], (err, rows) =>  { 
+        db.all(`SELECT test_id, resp_id as respondent_id, (unixepoch(timestamp) - 10800) as datetime, quiz_id FROM result WHERE timestamp >= datetime(?, 'localtime')`, [timestamp], (err, rows) =>  { 
             if (err) {
                 reject(err);
             }
