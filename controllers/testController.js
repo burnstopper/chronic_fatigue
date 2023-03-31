@@ -15,8 +15,8 @@ exports.save = async (req, res) => {
         }
 
         const quiz_id = parseInt(req.body.quiz_id);
-
-        if (req.body.quiz_id.length > 0 && isNaN(quiz_id)) {
+        
+        if (isNaN(quiz_id) && req.body.quiz_id != null && req.body.quiz_id.length > 0) {
             throw new Error("Invalid structure of test data!");
         }
 
